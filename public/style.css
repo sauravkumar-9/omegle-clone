@@ -49,7 +49,7 @@
 }
 
 video {
-  height: 600px;
+  height: 70%;
   border-radius: 1rem;
   margin: 0.5rem;
   width: 500px;
@@ -70,6 +70,7 @@ video {
 }
 
 .options__right {
+  display: flex;
   margin-left: auto;
 }
 

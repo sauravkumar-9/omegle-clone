@@ -87,6 +87,8 @@ text.addEventListener("keydown", (e) => {
     text.value = "";
   }
 });
+const skipCallButton = document.querySelector("#skipCallButton");
+const endCallButton = document.querySelector("#endCallButton");
 
 const inviteButton = document.querySelector("#inviteButton");
 const muteButton = document.querySelector("#muteButton");
@@ -119,6 +121,16 @@ stopVideo.addEventListener("click", () => {
     stopVideo.classList.toggle("background__red");
     stopVideo.innerHTML = html;
   }
+});
+
+// Button Actions here
+
+skipCallButton.addEventListener("click", (e) => {
+  console.log("skipCallButton");
+});
+
+endCallButton.addEventListener("click", (e) => {
+  console.log("endCallButton")
 });
 
 inviteButton.addEventListener("click", (e) => {
