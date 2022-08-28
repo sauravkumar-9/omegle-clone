@@ -1,4 +1,4 @@
-const socket = io("/");
+const socket = io("/", { transports: ["polling"] });
 const videoGrid = document.getElementById("video-grid");
 const myVideo = document.createElement("video");
 const showChat = document.querySelector("#showChat");
@@ -24,7 +24,7 @@ const user = prompt("Enter your name");
 var peer = new Peer(undefined, {
   path: "/peerjs",
   host: "/",
-  port: "443",
+  port: "3030",
 });
 
 let myVideoStream;
@@ -76,7 +76,7 @@ let messages = document.querySelector(".messages");
 
 send.addEventListener("click", (e) => {
   if (text.value.length !== 0) {
-    socket.emit("message", text.value);
+    socket.emit("message", { message:text.value });
     text.value = "";
   }
 });
@@ -133,12 +133,12 @@ endCallButton.addEventListener("click", (e) => {
   console.log("endCallButton")
 });
 
-inviteButton.addEventListener("click", (e) => {
-  prompt(
-    "Copy this link and send it to people you want to meet with",
-    window.location.href
-  );
-});
+// inviteButton.addEventListener("click", (e) => {
+//   prompt(
+//     "Copy this link and send it to people you want to meet with",
+//     window.location.href
+//   );
+// });
 
 socket.on("createMessage", (message, userName) => {
   messages.innerHTML =
