@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  redisserver:
+    image: redis:7.0
+    restart: always
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_URL=redis://redis:6379
+    command: "redis-server --save 20 1 --loglevel warning"
+    volumes:
+      - redisserver:/data
+
+  socketsync:
+    image: redis:7.0
+    restart: always
+    ports:
+      - '6380:6380'
+    environment:
+      - REDIS_URL=redis://redis:6380
+    command: "redis-server --save 20 1 --loglevel warning --port 6380"
+    volumes:
+      - socketsync:/data
+
+  omegal_clone:
+    container_name: omegal_clone
+    build: .
+    depends_on:
+      - redisserver
+    ports:
+      - 3030:3030
+    links:
+      - redisserver
+
+volumes:
+  redisserver:
+    driver: local
+  socketsync:
+    driver: local

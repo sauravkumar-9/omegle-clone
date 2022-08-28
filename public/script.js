@@ -46,6 +46,7 @@ navigator.mediaDevices
     });
 
     socket.on("user-connected", (userId) => {
+      console.log("User connected");
       connectToNewUser(userId, stream);
     });
   });
@@ -59,7 +60,9 @@ const connectToNewUser = (userId, stream) => {
 };
 
 peer.on("open", (id) => {
-  socket.emit("join-room", ROOM_ID, id, user);
+  socket.on("room_id", (room_id) => {
+    socket.emit("join-room", room_id, id, user);
+  });
 });
 
 const addVideoStream = (video, stream) => {
