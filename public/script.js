@@ -73,6 +73,8 @@ socket.on("room_id", (room_id) => {
 });
 
 socket.on("user-disconnected", (userName) => {
+  clearUIRoomData();
+  console.log("DISCONNECT ----------------------")
   socket.disconnect();
   socket = io("/", { transports: ["polling"] });
 });
