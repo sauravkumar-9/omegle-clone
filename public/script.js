@@ -36,13 +36,13 @@ navigator.mediaDevices
   })
   .then((stream) => {
     myVideoStream = stream;
-    addVideoStream(myVideo, stream);
+    addVideoStream(myVideo, stream, "self");
 
     peer.on("call", (call) => {
       call.answer(stream);
       const video = document.createElement("video");
       call.on("stream", (userVideoStream) => {
-        addVideoStream(video, userVideoStream);
+        addVideoStream(video, userVideoStream, "other");
       });
     });
 
@@ -56,7 +56,7 @@ const connectToNewUser = (userId, stream) => {
   const call = peer.call(userId, stream);
   const video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
-    addVideoStream(video, userVideoStream);
+    addVideoStream(video, userVideoStream, "other");
   });
 };
 
@@ -77,7 +77,8 @@ socket.on("user-disconnected", (userName) => {
   socket = io("/", { transports: ["polling"] });
 });
 
-const addVideoStream = (video, stream) => {
+const addVideoStream = (video, stream, type) => {
+  video.id = `${type}_video`
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
@@ -141,12 +142,19 @@ stopVideo.addEventListener("click", () => {
 // Button Actions here
 
 skipCallButton.addEventListener("click", (e) => {
+  clearUIRoomData();
   console.log("skipCallButton");
   socket.disconnect();
   socket = io("/", { transports: ["polling"] });
 });
 
+function clearUIRoomData() {
+  messages.innerHTML = "";
+  document.getElementById("other_video").remove();
+}
+
 endCallButton.addEventListener("click", (e) => {
+  clearUIRoomData();
   console.log("endCallButton")
 });
 
