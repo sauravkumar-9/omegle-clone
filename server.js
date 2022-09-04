@@ -27,7 +27,7 @@ app.use(express.static("public"));
 //   });
 
 app.get("/", (req, res) => {
-  res.render("room", { });
+  res.render("room", {});
 });
 
 
@@ -40,6 +40,11 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("user-connected", userId);
     socket.on("message", (message) => {
       io.to(roomId).emit("createMessage", message, userName);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log(`User disconnected: ${userName} due to ${reason}`);
+      io.to(roomId).emit("user-disconnected", userName);
     });
   });
 });
@@ -60,6 +65,6 @@ roomQueue.process(async function (job, done) {
   done();
 });
 
-server.listen(process.env.PORT || 3030, () =>{
+server.listen(process.env.PORT || 3030, () => {
   console.log("Server started at 3030")
 });
