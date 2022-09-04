@@ -49,9 +49,9 @@ roomQueue.process(async function (job, done) {
   const data = job.data;
   let value = await roomIDQueue.getNextJob();
   let room_id = null;
-  if (!value || !value.data || value.exp < new Date().getTime()) {
+  if (!value || !value.data) {
     room_id = uuidv4();
-    await roomIDQueue.add({ room_id, exp: (new Date().getTime() + 2 * 60 * 1000) });
+    await roomIDQueue.add({ room_id });
   } else {
     room_id = value.data.room_id;
   }

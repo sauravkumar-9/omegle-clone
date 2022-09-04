@@ -59,10 +59,14 @@ const connectToNewUser = (userId, stream) => {
   });
 };
 
+let peerId;
+
 peer.on("open", (id) => {
-  socket.on("room_id", (room_id) => {
-    socket.emit("join-room", room_id, id, user);
-  });
+  peerId = id;
+});
+
+socket.on("room_id", (room_id) => {
+  socket.emit("join-room", room_id, peerId, user);
 });
 
 const addVideoStream = (video, stream) => {
@@ -79,7 +83,7 @@ let messages = document.querySelector(".messages");
 
 send.addEventListener("click", (e) => {
   if (text.value.length !== 0) {
-    socket.emit("message", { message:text.value });
+    socket.emit("message", text.value );
     text.value = "";
   }
 });
