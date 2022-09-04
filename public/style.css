@@ -181,6 +181,20 @@ video {
     flex: 1;
   }
 
+  .main {
+    overflow: auto;
+  }
+
+  .options {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .options__right {
+    margin-left: 0;
+  }
+
   video {
     height: auto;
     width: 100%;
