@@ -145,6 +145,7 @@ stopVideo.addEventListener("click", () => {
 
 skipCallButton.addEventListener("click", (e) => {
   clearUIRoomData();
+  window.location.reload();
   console.log("skipCallButton");
   socket.disconnect();
   socket = io("/", { transports: ["polling"] });
