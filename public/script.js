@@ -21,11 +21,12 @@ showChat.addEventListener("click", () => {
 
 const user = prompt("Enter your name");
 
-let peer = new Peer(undefined, {
-  path: "/peerjs",
-  host: "/",
-  port: "3030",
-});
+// var peer = new Peer(undefined, {
+//   path: "/peerjs",
+//   host: "/",
+//   port: "3030",
+// });
+const peer = new Peer();
 
 let myVideoStream;
 navigator.mediaDevices
@@ -46,7 +47,7 @@ navigator.mediaDevices
     });
 
     socket.on("user-connected", (userId) => {
-      console.log("User connected");
+      console.log("User connected", userId);
       connectToNewUser(userId, stream);
     });
   });
@@ -61,12 +62,14 @@ const connectToNewUser = (userId, stream) => {
 
 let peerId;
 
-peer.on("open", (id) => {
-  peerId = id;
-});
+
 
 socket.on("room_id", (room_id) => {
-  socket.emit("join-room", room_id, peerId, user);
+  peer.on("open", (id) => {
+    peerId = id;
+    socket.emit("join-room", room_id, peerId, user);
+  });
+
 });
 
 socket.on("user-disconnected", (userName) => {
