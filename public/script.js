@@ -69,6 +69,11 @@ socket.on("room_id", (room_id) => {
   socket.emit("join-room", room_id, peerId, user);
 });
 
+socket.on("user-disconnected", (userName) => {
+  socket.disconnect();
+  socket = io("/", { transports: ["polling"] });
+});
+
 const addVideoStream = (video, stream) => {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
@@ -83,7 +88,7 @@ let messages = document.querySelector(".messages");
 
 send.addEventListener("click", (e) => {
   if (text.value.length !== 0) {
-    socket.emit("message", text.value );
+    socket.emit("message", text.value);
     text.value = "";
   }
 });
@@ -153,9 +158,8 @@ socket.on("createMessage", (message, userName) => {
   messages.innerHTML =
     messages.innerHTML +
     `<div class="message">
-        <b><i class="far fa-user-circle"></i> <span> ${
-          userName === user ? "me" : userName
-        }</span> </b>
+        <b><i class="far fa-user-circle"></i> <span> ${userName === user ? "me" : userName
+    }</span> </b>
         <span>${message}</span>
     </div>`;
 });
