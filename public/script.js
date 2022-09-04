@@ -1,4 +1,4 @@
-const socket = io("/", { transports: ["polling"] });
+let socket = io("/", { transports: ["polling"] });
 const videoGrid = document.getElementById("video-grid");
 const myVideo = document.createElement("video");
 const showChat = document.querySelector("#showChat");
@@ -21,7 +21,7 @@ showChat.addEventListener("click", () => {
 
 const user = prompt("Enter your name");
 
-var peer = new Peer(undefined, {
+let peer = new Peer(undefined, {
   path: "/peerjs",
   host: "/",
   port: "3030",
@@ -134,6 +134,8 @@ stopVideo.addEventListener("click", () => {
 
 skipCallButton.addEventListener("click", (e) => {
   console.log("skipCallButton");
+  socket.disconnect();
+  socket = io("/", { transports: ["polling"] });
 });
 
 endCallButton.addEventListener("click", (e) => {
