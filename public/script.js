@@ -82,6 +82,7 @@ socket.on("room_id", (room_id) => {
 });
 
 socket.on("user-disconnected", async (userName) => {
+  clearUIRoomData();
   // await new Promise((resolve ) => {
   //   setTimeout(() => {
   //     resolve({});
