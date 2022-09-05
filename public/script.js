@@ -81,11 +81,13 @@ socket.on("room_id", (room_id) => {
   });
 });
 
-socket.on("user-disconnected", (userName) => {
-  clearUIRoomData();
-  console.log("DISCONNECT ----------------------")
-  socket.disconnect();
-  socket = io("/", { transports: ["polling"] });
+socket.on("user-disconnected", async (userName) => {
+  await new Promise((resolve ) => {
+    setTimeout(() => {
+      resolve({});
+    }, Math.random() * 1000);
+  });
+  window.location.reload();
 });
 
 const addVideoStream = (video, stream, type) => {
@@ -153,11 +155,7 @@ stopVideo.addEventListener("click", () => {
 // Button Actions here
 
 skipCallButton.addEventListener("click", (e) => {
-  clearUIRoomData();
   window.location.reload();
-  console.log("skipCallButton");
-  socket.disconnect();
-  socket = io("/", { transports: ["polling"] });
 });
 
 function clearUIRoomData() {
