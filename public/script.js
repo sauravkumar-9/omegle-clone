@@ -82,12 +82,12 @@ socket.on("room_id", (room_id) => {
 });
 
 socket.on("user-disconnected", async (userName) => {
-  await new Promise((resolve ) => {
-    setTimeout(() => {
-      resolve({});
-    }, Math.random() * 1000);
-  });
-  window.location.reload();
+  // await new Promise((resolve ) => {
+  //   setTimeout(() => {
+  //     resolve({});
+  //   }, Math.random() * 1000);
+  // });
+  // window.location.reload();
 });
 
 const addVideoStream = (video, stream, type) => {
