@@ -19,7 +19,16 @@ showChat.addEventListener("click", () => {
   document.querySelector(".header__back").style.display = "block";
 });
 
-const user = prompt("Enter your name");
+const userFromSession = sessionStorage.getItem('userName');
+console.log("userFromSession ----", userFromSession)
+let user;
+if(userFromSession) {
+  user = userFromSession;
+} 
+else {
+  user = prompt("Enter your name");
+  sessionStorage.setItem('userName', user);
+}
 
 // var peer = new Peer(undefined, {
 //   path: "/peerjs",
@@ -65,11 +74,11 @@ let peerId;
 
 
 socket.on("room_id", (room_id) => {
+  console.log("ROOM Id event TRIGGERED ------------------", peer)
   peer.on("open", (id) => {
     peerId = id;
     socket.emit("join-room", room_id, peerId, user);
   });
-
 });
 
 socket.on("user-disconnected", (userName) => {
@@ -153,10 +162,11 @@ skipCallButton.addEventListener("click", (e) => {
 
 function clearUIRoomData() {
   messages.innerHTML = "";
-  document.getElementById("other_video").remove();
+  document.getElementById("other_video")?.remove();
 }
 
 endCallButton.addEventListener("click", (e) => {
+  socket.disconnect();
   clearUIRoomData();
   console.log("endCallButton")
 });

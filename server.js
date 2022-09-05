@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
   roomQueue.add({ socket_id: socket.id });
   socket.on('join-room', async (roomId, userId, userName) => {
     socket.join(roomId);
-    console.log(`Room join ${roomId} User: ${userName}`);
+    console.log(`Room join ------------------------------------------- ${roomId} User: ${userName}`);
     socket.to(roomId).emit("user-connected", userId);
     socket.on("message", (message) => {
       io.to(roomId).emit("createMessage", message, userName);
@@ -53,6 +53,7 @@ io.on("connection", (socket) => {
 roomQueue.process(async function (job, done) {
   const data = job.data;
   let value = await roomIDQueue.getNextJob();
+  console.log("VALUE -------", value?.data)
   let room_id = null;
   if (!value || !value.data) {
     room_id = uuidv4();
@@ -60,7 +61,7 @@ roomQueue.process(async function (job, done) {
   } else {
     room_id = value.data.room_id;
   }
-  console.log('room_id', room_id, data.socket_id);
+  console.log('room_id', {roomId: room_id, socketId: data.socket_id});
   io.to(data.socket_id).emit('room_id', room_id);
   done();
 });
