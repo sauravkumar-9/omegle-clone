@@ -209,8 +209,9 @@ video {
   }
 
   video {
-    height: auto;
+    height: 45% !important;
     width: 100%;
+    margin: 0rem !important;
   }
 
   #showChat {
