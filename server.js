@@ -61,6 +61,10 @@ roomQueue.process(async function (job, done) {
   } else {
     room_id = value.data.room_id;
   }
+  console.log(`Test =========== ${io.sockets.adapter.rooms.get(room_id).size}`);
+  if(io.sockets.adapter.rooms.get(room_id).size == 0) {
+    await roomIDQueue.add({ room_id });
+  }
   console.log('room_id', {roomId: room_id, socketId: data.socket_id});
   io.to(data.socket_id).emit('room_id', room_id);
   done();
