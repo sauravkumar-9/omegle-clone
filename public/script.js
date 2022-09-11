@@ -74,11 +74,17 @@ let peerId;
 
 
 socket.on("room_id", (room_id) => {
-  console.log("ROOM Id event TRIGGERED ------------------", peer)
-  peer.on("open", (id) => {
-    peerId = id;
-    socket.emit("join-room", room_id, peerId, user);
-  });
+  console.log("ROOM Id event TRIGGERED ------------------", peer);
+  if(peer._id) {
+    console.log("ALREADY EXSTS peer id", peer._id)
+    socket.emit("join-room", room_id, peer._id, user);
+  } else { 
+    peer.on("open", (id) => {
+      console.log("NEW PEER ID", id)
+      peerId = id;
+      socket.emit("join-room", room_id, peerId, user);
+    });
+  }
 });
 
 socket.on("user-disconnected", async (userName) => {
@@ -118,7 +124,7 @@ text.addEventListener("keydown", (e) => {
   }
 });
 const skipCallButton = document.querySelector("#skipCallButton");
-const endCallButton = document.querySelector("#endCallButton");
+// const endCallButton = document.querySelector("#endCallButton");
 
 const inviteButton = document.querySelector("#inviteButton");
 const muteButton = document.querySelector("#muteButton");
@@ -164,11 +170,11 @@ function clearUIRoomData() {
   document.getElementById("other_video")?.remove();
 }
 
-endCallButton.addEventListener("click", (e) => {
-  socket.disconnect();
-  clearUIRoomData();
-  console.log("endCallButton")
-});
+// endCallButton.addEventListener("click", (e) => {
+//   socket.disconnect();
+//   clearUIRoomData();
+//   console.log("endCallButton")
+// });
 
 // inviteButton.addEventListener("click", (e) => {
 //   prompt(
