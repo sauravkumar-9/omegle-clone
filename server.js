@@ -30,44 +30,48 @@ app.get("/", (req, res) => {
   res.render("room", {});
 });
 
-
-
 io.on("connection", (socket) => {
-  roomQueue.add({ socket_id: socket.id });
-  socket.on('join-room', async (roomId, userId, userName) => {
+  roomQueue.add({ socket_id: socket.id, type: "join" });
+  socket.on("join-room", async (roomId, userId, userName) => {
     socket.join(roomId);
-    console.log(`Room join ------------------------------------------- ${roomId} User: ${userName}`);
+    console.log(
+      `Room join ------------------------------------------- ${roomId} User: ${userName}`
+    );
     socket.to(roomId).emit("user-connected", userId);
     socket.on("message", (message) => {
       io.to(roomId).emit("createMessage", message, userName);
     });
 
-    socket.on("disconnect", (reason) => {
+    socket.on("disconnect", async (reason) => {
       console.log(`User disconnected: ${userName} due to ${reason}`);
+      roomQueue.add({ room_id: roomId, type: "leave" });
       io.to(roomId).emit("user-disconnected", userName);
     });
   });
 });
 
-
 roomQueue.process(async function (job, done) {
   const data = job.data;
-  let value = await roomIDQueue.getNextJob();
-  console.log("VALUE -------", value?.data)
-  let room_id = null;
-  if (!value || !value.data) {
-    room_id = uuidv4();
-    await roomIDQueue.add({ room_id });
-  } else {
-    room_id = value.data.room_id;
+  if (data.type == "join") {
+    let value = await roomIDQueue.getNextJob();
+    console.log("VALUE -------", value?.data);
+    let room_id = null;
+    if (!value || !value.data) {
+      room_id = uuidv4();
+      await roomIDQueue.add({ room_id });
+    } else {
+      room_id = value.data.room_id;
+    }
+    console.log("room_id", { roomId: room_id, socketId: data.socket_id });
+    io.to(data.socket_id).emit("room_id", room_id);
+  } else if (data.type == "leave") {
+    let value = await roomIDQueue.getNextJob();
+    console.log(value?.data, data);
+    if (value && value.data && value.data.room_id != data.room_id) {
+      await roomIDQueue.add({ room_id: value.data.room_id });
+    }
   }
-  console.log(`Test =========== ${io.sockets.adapter.rooms.get(room_id).size}`);
-  if(io.sockets.adapter.rooms.get(room_id).size == 0) {
-    await roomIDQueue.add({ room_id });
-  }
-  console.log('room_id', {roomId: room_id, socketId: data.socket_id});
-  io.to(data.socket_id).emit('room_id', room_id);
-  done();
+done();
 });
 
 server.listen(process.env.PORT || 3030, () => {
