@@ -38,6 +38,7 @@ else {
 const peer = new Peer();
 
 let myVideoStream;
+updateHelpText("ADD_PERSON")
 navigator.mediaDevices
   .getUserMedia({
     audio: true,
@@ -52,6 +53,7 @@ navigator.mediaDevices
       const video = document.createElement("video");
       call.on("stream", (userVideoStream) => {
         addVideoStream(video, userVideoStream, "other");
+        document.getElementById("self_video").className = "self_video";  
       });
     });
 
@@ -66,6 +68,7 @@ const connectToNewUser = (userId, stream) => {
   const video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream, "other");
+    document.getElementById("self_video").className = "self_video";  
   });
 };
 
@@ -88,6 +91,8 @@ socket.on("room_id", (room_id) => {
 });
 
 socket.on("user-disconnected", async (userName) => {
+  document.getElementById("self_video").classList.remove("self_video");
+  updateHelpText("USER_LEFT")
   clearUIRoomData();
   // await new Promise((resolve ) => {
   //   setTimeout(() => {
@@ -98,7 +103,9 @@ socket.on("user-disconnected", async (userName) => {
 });
 
 const addVideoStream = (video, stream, type) => {
+  if(type === 'other') updateHelpText("USER_CONNECTED")
   video.id = `${type}_video`
+  // video.classList = `${type}_video`
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
@@ -192,3 +199,12 @@ socket.on("createMessage", (message, userName) => {
         <span>${message}</span>
     </div>`;
 });
+
+function updateHelpText(key) {
+  const keyMsgMap = {
+    USER_LEFT: "User Left the chat. Click on add person to find a new match",
+    ADD_PERSON: "Trying to find a new match. Please wait",
+    USER_CONNECTED: "Someone joined the chat"
+  }
+  document.getElementById("help_text").innerHTML = keyMsgMap[key];
+}
