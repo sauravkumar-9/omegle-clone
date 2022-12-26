@@ -197,10 +197,19 @@ video {
 }
 
 .help_text_container {
+  display: block;
   background: white;
   padding: 0.5rem;
   font-size: 0.9rem;
   border-radius: 0.3rem;
+}
+
+.help_text_container_mobile {
+  display: none;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 @media (max-width: 700px) {
@@ -227,12 +236,33 @@ video {
   }
 
   video {
-    height: 45% !important;
+    height: 100% !important;
     width: 100%;
     margin: 0rem !important;
   }
 
   #showChat {
     display: flex;
+  }
+
+  .help_text_container_mobile {
+    display: block;
+    background: white;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border-radius: 0.3rem;
+  }
+
+  .help_text_container {
+    display: none;
+  }
+
+  .self_video {
+    width: 25% !important;
+    height: 25% !important;
+  }
+
+  .video-grid {
+    height: 100%;
   }
 }

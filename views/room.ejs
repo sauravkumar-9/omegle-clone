@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>videoChatApp</title>
+    <title>Know Me</title>
     <link rel="stylesheet" href="style.css" />
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
@@ -21,19 +21,23 @@
     <div class="main">  
     <div class="main__left">
       <div class="videos__group">
-        <div id="video-grid">
+        <div id="video-grid" class="video-grid">
 
         </div>
       </div>
+      <div class="help_text_container_mobile">
+        <div id="help_text_mobile"></div>
+      </div>
+
       <div class="options">
         <div class="options__left">
-          <div id="stopVideo" class="options__button">
+          <div id="stopVideo" class="options__button pointer">
             <i class="fa fa-video-camera"></i>
           </div>
-          <div id="muteButton" class="options__button">
+          <div id="muteButton" class="options__button pointer">
             <i class="fa fa-microphone"></i>
           </div>
-          <div id="showChat" class="options__button">
+          <div id="showChat" class="options__button pointer">
             <i class="fa fa-comment"></i>
           </div>
         </div>
@@ -45,7 +49,7 @@
             <div id="help_text"></div>
           </div>
 
-          <div id="skipCallButton" class="options__button">
+          <div id="skipCallButton" class="options__button pointer">
             <i class="fas fa-user-plus"></i>
           </div>
         </div>

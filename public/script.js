@@ -207,4 +207,5 @@ function updateHelpText(key) {
     USER_CONNECTED: "Someone joined the chat"
   }
   document.getElementById("help_text").innerHTML = keyMsgMap[key];
+  document.getElementById("help_text_mobile").innerHTML = keyMsgMap[key];
 }
