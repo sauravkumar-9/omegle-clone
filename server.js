@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const Queue = require('bull');
-const roomQueue = new Queue('roomqueue', { redis: { port: 6379, host: 'video-chat-redis-001.9ux6qq.0001.aps1.cache.amazonaws.com' } });
-const roomIDQueue = new Queue('room_id_queue', { redis: { port: 6379, host: 'video-chat-redis-001.9ux6qq.0001.aps1.cache.amazonaws.com' } });
+const roomQueue = new Queue('roomqueue', { redis: { port: 6379, host: 'video-chat-redis.9ux6qq.ng.0001.aps1.cache.amazonaws.com' } });
+const roomIDQueue = new Queue('room_id_queue', { redis: { port: 6379, host: 'video-chat-redis.9ux6qq.ng.0001.aps1.cache.amazonaws.com' } });
 
 const { v4: uuidv4 } = require("uuid");
 app.set("view engine", "ejs");
