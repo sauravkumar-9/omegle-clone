@@ -22,13 +22,13 @@ showChat.addEventListener("click", () => {
 const userFromSession = sessionStorage.getItem('userName');
 console.log("userFromSession ----", userFromSession)
 let user;
-if(userFromSession) {
-  user = userFromSession;
-} 
-else {
-  user = prompt("Enter your name");
-  sessionStorage.setItem('userName', user);
-}
+// if(userFromSession) {
+//   user = userFromSession;
+// } 
+// else {
+//   user = prompt("Enter your name");
+//   sessionStorage.setItem('userName', user);
+// }
 
 // var peer = new Peer(undefined, {
 //   path: "/peerjs",
