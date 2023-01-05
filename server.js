@@ -31,12 +31,14 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
+  console.log("io on connection")
   roomQueue.add({ socket_id: socket.id, type: "join" });
   socket.on("join-room", async (roomId, userId, userName) => {
-    socket.join(roomId);
+    console.log("LL", {roomId, userId, userName})
     console.log(
       `Room join ------------------------------------------- ${roomId} User: ${userName}`
     );
+    socket.join(roomId);
     socket.to(roomId).emit("user-connected", userId);
     socket.on("message", (message) => {
       io.to(roomId).emit("createMessage", message, userName);

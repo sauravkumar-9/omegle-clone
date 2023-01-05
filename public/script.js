@@ -59,17 +59,22 @@ navigator.mediaDevices
 
     socket.on("user-connected", (userId) => {
       console.log("User connected", userId);
+      updateHelpText("USER_CONNECTED");
       connectToNewUser(userId, stream);
     });
   });
 
 const connectToNewUser = (userId, stream) => {
-  const call = peer.call(userId, stream);
-  const video = document.createElement("video");
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(video, userVideoStream, "other");
-    document.getElementById("self_video").className = "self_video";  
-  });
+  try {
+    const call = peer.call(userId, stream);
+    const video = document.createElement("video");
+    call.on("stream", (userVideoStream) => {
+      addVideoStream(video, userVideoStream, "other");
+      document.getElementById("self_video").className = "self_video";  
+    });
+  } catch(err) {
+    console.log("connectToNewUser", err)
+  }
 };
 
 let peerId;
@@ -78,6 +83,7 @@ let peerId;
 
 socket.on("room_id", (room_id) => {
   console.log("ROOM Id event TRIGGERED ------------------", peer);
+  try { 
   if(peer._id) {
     console.log("ALREADY EXSTS peer id", peer._id)
     socket.emit("join-room", room_id, peer._id, user);
@@ -87,6 +93,9 @@ socket.on("room_id", (room_id) => {
       peerId = id;
       socket.emit("join-room", room_id, peerId, user);
     });
+  }}
+  catch(err) {
+    console.log("socket.on room_id" , err);
   }
 });
 
@@ -103,7 +112,7 @@ socket.on("user-disconnected", async (userName) => {
 });
 
 const addVideoStream = (video, stream, type) => {
-  if(type === 'other') updateHelpText("USER_CONNECTED")
+  // if(type === 'other') updateHelpText("USER_CONNECTED")
   video.id = `${type}_video`
   // video.classList = `${type}_video`
   video.srcObject = stream;
