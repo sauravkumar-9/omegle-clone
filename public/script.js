@@ -5,6 +5,10 @@ const showChat = document.querySelector("#showChat");
 const backBtn = document.querySelector(".header__back");
 myVideo.muted = true;
 
+let mainVideo; 
+let mainUserVideoStream;
+let mainType;
+
 backBtn.addEventListener("click", () => {
   document.querySelector(".main__left").style.display = "flex";
   document.querySelector(".main__left").style.flex = "1";
@@ -63,13 +67,15 @@ navigator.mediaDevices
   })
   .then((stream) => {
     myVideoStream = stream;
-    addVideoStream(myVideo, stream, "self");
+    triggerUserClickAction(myVideo, stream, "self");
+    // addVideoStream(myVideo, stream, "self");
 
     peer.on("call", (call) => {
       call.answer(stream);
       const video = document.createElement("video");
       call.on("stream", (userVideoStream) => {
-        addVideoStream(video, userVideoStream, "other");
+        triggerUserClickAction(video, userVideoStream, "other");
+        // addVideoStream(video, userVideoStream, "other");
         updateHelpText("USER_CONNECTED");
         document.getElementById("self_video").className = "self_video";  
       });
@@ -87,7 +93,8 @@ const connectToNewUser = (userId, stream) => {
     const call = peer.call(userId, stream);
     const video = document.createElement("video");
     call.on("stream", (userVideoStream) => {
-      addVideoStream(video, userVideoStream, "other");
+      triggerUserClickAction(video, userVideoStream, "other");
+      // addVideoStream(video, userVideoStream, "other");
       document.getElementById("self_video").className = "self_video";  
     });
   } catch(err) {
@@ -236,3 +243,16 @@ function updateHelpText(key) {
   document.getElementById("help_text").innerHTML = keyMsgMap[key];
   document.getElementById("help_text_mobile").innerHTML = keyMsgMap[key];
 }
+
+let actionButton = document.getElementById("actionButton");
+
+function triggerUserClickAction(video, userVideoStream, type) {
+  mainVideo = video; 
+  mainUserVideoStream = userVideoStream;
+  mainType = type;
+  actionButton.click();
+}
+
+actionButton.addEventListener("click", (e) => {
+  addVideoStream(mainVideo, mainUserVideoStream, mainType);
+});
