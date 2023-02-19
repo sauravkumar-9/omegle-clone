@@ -56,7 +56,17 @@ let user = getCookie("userName");
 //   host: "/",
 //   port: "3030",
 // });
-const peer = new Peer();
+let peer;
+if(navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Version') != -1 && parseFloat(navigator.userAgent.substring(navigator.userAgent.indexOf('Version') + 8).split(' ')[0]) >= 5) {
+  peer = new Peer({
+    config: {
+      serialization: "json"
+    }
+  });
+} else {
+  peer = new Peer();
+}
+
 
 let myVideoStream;
 updateHelpText("ADD_PERSON")
@@ -247,6 +257,7 @@ function updateHelpText(key) {
 let actionButton = document.getElementById("actionButton");
 
 function triggerUserClickAction(video, userVideoStream, type) {
+  console.log("triggerUserClickAction ----")
   mainVideo = video; 
   mainUserVideoStream = userVideoStream;
   mainType = type;
@@ -254,5 +265,6 @@ function triggerUserClickAction(video, userVideoStream, type) {
 }
 
 actionButton.addEventListener("click", (e) => {
+  console.log("addEventListener clicked ---")
   addVideoStream(mainVideo, mainUserVideoStream, mainType);
 });
